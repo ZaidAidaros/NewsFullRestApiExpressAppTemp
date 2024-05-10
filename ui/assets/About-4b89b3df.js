@@ -1,0 +1,1 @@
+import{_ as t,o as a,c as r,w as e,f as s,a as c,b as o,V as f}from"./index-d76a5229.js";const n={};function _(d,l){return a(),r(s,{flat:"",class:"mx-auto pa-8 grey text--red justify-center"},{default:e(()=>[c(f,null,{default:e(()=>[o(".........About....Us.......")]),_:1})]),_:1})}const x=t(n,[["render",_]]);export{x as default};

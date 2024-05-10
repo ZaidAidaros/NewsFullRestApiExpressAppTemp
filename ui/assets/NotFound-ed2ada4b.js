@@ -1,0 +1,1 @@
+import{_ as t,o as a,c as o,w as e,f as r,a as c,b as s,V as n}from"./index-d76a5229.js";const d={};function f(_,l){return a(),o(r,{flat:"",class:"mx-auto pa-8 grey text--red justify-center"},{default:e(()=>[c(n,null,{default:e(()=>[s("Not Found ..... 404")]),_:1})]),_:1})}const x=t(d,[["render",f]]);export{x as default};

@@ -1,18 +1,16 @@
-const db_config = require("../config/db_config.js");
-const { Sequelize, DataTypes, Model } = require("sequelize");
+const getDBConfig = require("../config/db_config.js");
+const initAdminUser = require("../config/init_db.js");
+const { Sequelize, DataTypes, Model, json } = require("sequelize");
 
-const sequelize = new Sequelize(db_config.development);
+const sequelize = new Sequelize(getDBConfig(process.env.mode));
 
-// sequelize
-//   .authenticate()
-//   .then(() => console.log("*****authenticated...."))
-//   .catch((error) => console.error(error));
+
 
 const db = {};
 db.sequelize = sequelize;
 
-// tables
 
+//////////// DB Tables  ///////////////////////////////////////////////////////
 db.User = require("./user.js")(sequelize, DataTypes, Model);
 
 db.UserPermission = require("./user_permission.js")(
@@ -46,7 +44,7 @@ db.ArticleComment = require("./article_comment.js")(
   Model
 );
 
-// relationships
+//////////// Relationships  ///////////////////////////////////////////////////////
 
 db.User.belongsTo(db.UserPermission);
 db.UserPermission.hasMany(db.User);
@@ -84,6 +82,30 @@ db.User.hasMany(db.UserBookMark);
 db.UserBookMark.belongsTo(db.Article);
 db.Article.hasMany(db.UserBookMark);
 
-// sequelize.sync({ force: true });
+
+//////////// DB Connection, Sync  ///////////////////////////////////////////////////////
+console.log("************Start DB Connection************");
+sequelize
+  .authenticate()
+  .then(() => {
+    console.log("************DB Authenticated************");
+    console.log("***Start Sync DB***");
+    sequelize.sync({force:true, logging:false}).then(()=>{
+      initAdminUser(db);
+      console.log("***DB Sync Finsh***");
+    });
+    console.log("********************************");
+  })
+  .catch((error) => {
+    console.log("************DB Error************");
+    const code = error.parent.code;
+    const errno = error.parent.errno;
+    const syscall = error.parent.syscall;
+    console.error("Error: \n errno:"+errno+"\n code:"+code+"\n syscall:"+syscall);
+    console.log("-Check IF DB IS RUNNIG");
+    console.log("-Check Auth Info Is Correct");
+    console.log("********************************");
+    return;
+  });
 
 module.exports = db;
